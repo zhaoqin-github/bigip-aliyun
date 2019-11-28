@@ -1,0 +1,298 @@
+{
+    "ROSTemplateFormatVersion": "2015-09-01",
+    "Description": "",
+    "Parameters": {},
+    "Mappings": {},
+    "Conditions": {},
+    "Resources": {
+        "ALIYUN-ECS-VPC1": {
+            "Type": "ALIYUN::ECS::VPC",
+            "Properties": {
+                "VpcName": "bigip-net",
+                "CidrBlock": "192.168.0.0/16"
+            }
+        },
+        "ALIYUN-ECS-VSwitch1": {
+            "Type": "ALIYUN::ECS::VSwitch",
+            "Properties": {
+                "VSwitchName": "bigip-mgmt",
+                "VpcId": {
+                    "Ref": "ALIYUN-ECS-VPC1"
+                },
+                "CidrBlock": "192.168.1.0/24",
+                "ZoneId": "cn-beijing-h"
+            }
+        },
+        "ALIYUN-ECS-VSwitch2": {
+            "Type": "ALIYUN::ECS::VSwitch",
+            "Properties": {
+                "VSwitchName": "bigip-mgmt",
+                "VpcId": {
+                    "Ref": "ALIYUN-ECS-VPC1"
+                },
+                "CidrBlock": "192.168.2.0/24",
+                "ZoneId": "cn-beijing-g"
+            }
+        },
+        "ALIYUN-ECS-SecurityGroup1": {
+            "Type": "ALIYUN::ECS::SecurityGroup",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "ALIYUN-ECS-VPC1"
+                },
+                "SecurityGroupName": "bigip-security"
+            }
+        },
+        "ALIYUN-ECS-SecurityGroupIngress1": {
+            "Type": "ALIYUN::ECS::SecurityGroupIngress",
+            "Properties": {
+                "SecurityGroupId": {
+                    "Ref": "ALIYUN-ECS-SecurityGroup1"
+                },
+                "NicType": "internet",
+                "Priority": "1",
+                "Policy": "accept",
+                "SourceCidrIp": "0.0.0.0/0",
+                "PortRange": "-1/-1",
+                "IpProtocol": "icmp"
+            }
+        },
+        "ALIYUN-ECS-SecurityGroupIngress2": {
+            "Type": "ALIYUN::ECS::SecurityGroupIngress",
+            "Properties": {
+                "SecurityGroupId": {
+                    "Ref": "ALIYUN-ECS-SecurityGroup1"
+                },
+                "NicType": "internet",
+                "Priority": "1",
+                "Policy": "accept",
+                "SourceCidrIp": "0.0.0.0/0",
+                "PortRange": "22/22",
+                "IpProtocol": "tcp"
+            }
+        },
+        "ALIYUN-ECS-SecurityGroupIngress3": {
+            "Type": "ALIYUN::ECS::SecurityGroupIngress",
+            "Properties": {
+                "SecurityGroupId": {
+                    "Ref": "ALIYUN-ECS-SecurityGroup1"
+                },
+                "NicType": "internet",
+                "Priority": "1",
+                "Policy": "accept",
+                "SourceCidrIp": "0.0.0.0/0",
+                "PortRange": "80/80",
+                "IpProtocol": "tcp"
+            }
+        },
+        "ALIYUN-ECS-SecurityGroupIngress4": {
+            "Type": "ALIYUN::ECS::SecurityGroupIngress",
+            "Properties": {
+                "SecurityGroupId": {
+                    "Ref": "ALIYUN-ECS-SecurityGroup1"
+                },
+                "NicType": "internet",
+                "Priority": "1",
+                "Policy": "accept",
+                "SourceCidrIp": "0.0.0.0/0",
+                "PortRange": "443/443",
+                "IpProtocol": "tcp"
+            }
+        },
+        "ALIYUN-ECS-SecurityGroupIngress5": {
+            "Type": "ALIYUN::ECS::SecurityGroupIngress",
+            "Properties": {
+                "SecurityGroupId": {
+                    "Ref": "ALIYUN-ECS-SecurityGroup1"
+                },
+                "NicType": "internet",
+                "Priority": "1",
+                "Policy": "accept",
+                "SourceCidrIp": "0.0.0.0/0",
+                "PortRange": "8443/8443",
+                "IpProtocol": "tcp"
+            }
+        },
+        "ALIYUN-ECS-Instance1": {
+            "Type": "ALIYUN::ECS::Instance",
+            "Properties": {
+                "InstanceName": "bigip-13-1nic",
+                "ImageId": "m-2ze4sdg64yx1bunfxyd8",
+                "InstanceType": "ecs.g6.large",
+                "ZoneId": "cn-beijing-h",
+                "SystemDiskCategory": "cloud_efficiency",
+                "IoOptimized": "optimized",
+                "SystemDiskSize": "100",
+                "VpcId": {
+                    "Ref": "ALIYUN-ECS-VPC1"
+                },
+                "VSwitchId": {
+                    "Ref": "ALIYUN-ECS-VSwitch1"
+                },
+                "SecurityGroupId": {
+                    "Ref": "ALIYUN-ECS-SecurityGroup1"
+                },
+                "InstanceChargeType": "PostPaid",
+                "InternetChargeType": "PayByTraffic",
+                "InternetMaxBandwidthOut": 1,
+                "InternetMaxBandwidthIn": 200,
+                "Period": 1,
+                "AllocatePublicIP": true
+            }
+        },
+        "ALIYUN-ECS-Instance2": {
+            "Type": "ALIYUN::ECS::Instance",
+            "Properties": {
+                "InstanceName": "bigip-13-1nic",
+                "ImageId": "m-2ze4sdg64yx1bunfxyd8",
+                "InstanceType": "ecs.g6.large",
+                "ZoneId": "cn-beijing-g",
+                "SystemDiskCategory": "cloud_efficiency",
+                "IoOptimized": "optimized",
+                "SystemDiskSize": "100",
+                "VpcId": {
+                    "Ref": "ALIYUN-ECS-VPC1"
+                },
+                "VSwitchId": {
+                    "Ref": "ALIYUN-ECS-VSwitch2"
+                },
+                "SecurityGroupId": {
+                    "Ref": "ALIYUN-ECS-SecurityGroup1"
+                },
+                "InstanceChargeType": "PostPaid",
+                "InternetChargeType": "PayByTraffic",
+                "InternetMaxBandwidthOut": 1,
+                "InternetMaxBandwidthIn": 200,
+                "Period": 1,
+                "AllocatePublicIP": true
+            }
+        },
+        "ALIYUN-ECS-Instance3": {
+            "Type": "ALIYUN::ECS::Instance",
+            "Properties": {
+                "InstanceName": "web-server-01",
+                "ImageId": "ubuntu_18_04_64_20G_alibase_20191112.vhd",
+                "InstanceType": "ecs.t6-c4m1.large",
+                "ZoneId": "cn-beijing-h",
+                "SystemDiskCategory": "cloud_efficiency",
+                "IoOptimized": "optimized",
+                "SystemDiskSize": "20",
+                "Password": "Abcd1234$",
+                "VpcId": {
+                    "Ref": "ALIYUN-ECS-VPC1"
+                },
+                "VSwitchId": {
+                    "Ref": "ALIYUN-ECS-VSwitch1"
+                },
+                "SecurityGroupId": {
+                    "Ref": "ALIYUN-ECS-SecurityGroup1"
+                },
+                "UserData": "IyEvYmluL2Jhc2gKd2hpbGUgdHJ1ZSA7IGRvCihlY2hvIC1lICdIVFRQLzEuMSAyMDAgT0sNCic7IGVjaG8gLWUgIldlYiBTZXJ2ZXIgJChob3N0ICQoaG9zdG5hbWUpIHwgaGVhZCAtbjEgfCBhd2sgJ3twcmludCAkNH0nKSIpIHwgbmMgLXEgMCAtcCA4MCAtbCAwLjAuMC4wCmRvbmU=",
+                "InstanceChargeType": "PostPaid",
+                "InternetChargeType": "PayByTraffic",
+                "InternetMaxBandwidthOut": 1,
+                "InternetMaxBandwidthIn": 200,
+                "Period": 1
+            }
+        },
+        "ALIYUN-ECS-Instance4": {
+            "Type": "ALIYUN::ECS::Instance",
+            "Properties": {
+                "InstanceName": "web-server-02",
+                "ImageId": "ubuntu_18_04_64_20G_alibase_20191112.vhd",
+                "InstanceType": "ecs.t6-c4m1.large",
+                "ZoneId": "cn-beijing-h",
+                "SystemDiskCategory": "cloud_efficiency",
+                "IoOptimized": "optimized",
+                "SystemDiskSize": "20",
+                "Password": "Abcd1234$",
+                "VpcId": {
+                    "Ref": "ALIYUN-ECS-VPC1"
+                },
+                "VSwitchId": {
+                    "Ref": "ALIYUN-ECS-VSwitch1"
+                },
+                "SecurityGroupId": {
+                    "Ref": "ALIYUN-ECS-SecurityGroup1"
+                },
+                "UserData": "IyEvYmluL2Jhc2gKd2hpbGUgdHJ1ZSA7IGRvCihlY2hvIC1lICdIVFRQLzEuMSAyMDAgT0sNCic7IGVjaG8gLWUgIldlYiBTZXJ2ZXIgJChob3N0ICQoaG9zdG5hbWUpIHwgaGVhZCAtbjEgfCBhd2sgJ3twcmludCAkNH0nKSIpIHwgbmMgLXEgMCAtcCA4MCAtbCAwLjAuMC4wCmRvbmU=",
+                "InstanceChargeType": "PostPaid",
+                "InternetChargeType": "PayByTraffic",
+                "InternetMaxBandwidthOut": 1,
+                "InternetMaxBandwidthIn": 200,
+                "Period": 1
+            }
+        },
+        "ALIYUN-ECS-Instance5": {
+            "Type": "ALIYUN::ECS::Instance",
+            "Properties": {
+                "InstanceName": "web-server-03",
+                "ImageId": "ubuntu_18_04_64_20G_alibase_20191112.vhd",
+                "InstanceType": "ecs.t6-c4m1.large",
+                "ZoneId": "cn-beijing-g",
+                "SystemDiskCategory": "cloud_efficiency",
+                "IoOptimized": "optimized",
+                "SystemDiskSize": "20",
+                "Password": "Abcd1234$",
+                "VpcId": {
+                    "Ref": "ALIYUN-ECS-VPC1"
+                },
+                "VSwitchId": {
+                    "Ref": "ALIYUN-ECS-VSwitch2"
+                },
+                "SecurityGroupId": {
+                    "Ref": "ALIYUN-ECS-SecurityGroup1"
+                },
+                "UserData": "IyEvYmluL2Jhc2gKd2hpbGUgdHJ1ZSA7IGRvCihlY2hvIC1lICdIVFRQLzEuMSAyMDAgT0sNCic7IGVjaG8gLWUgIldlYiBTZXJ2ZXIgJChob3N0ICQoaG9zdG5hbWUpIHwgaGVhZCAtbjEgfCBhd2sgJ3twcmludCAkNH0nKSIpIHwgbmMgLXEgMCAtcCA4MCAtbCAwLjAuMC4wCmRvbmU=",
+                "InstanceChargeType": "PostPaid",
+                "InternetChargeType": "PayByTraffic",
+                "InternetMaxBandwidthOut": 1,
+                "InternetMaxBandwidthIn": 200,
+                "Period": 1
+            }
+        },
+        "ALIYUN-ECS-Instance6": {
+            "Type": "ALIYUN::ECS::Instance",
+            "Properties": {
+                "InstanceName": "web-server-04",
+                "ImageId": "ubuntu_18_04_64_20G_alibase_20191112.vhd",
+                "InstanceType": "ecs.t6-c4m1.large",
+                "ZoneId": "cn-beijing-g",
+                "SystemDiskCategory": "cloud_efficiency",
+                "IoOptimized": "optimized",
+                "SystemDiskSize": "20",
+                "Password": "Abcd1234$",
+                "VpcId": {
+                    "Ref": "ALIYUN-ECS-VPC1"
+                },
+                "VSwitchId": {
+                    "Ref": "ALIYUN-ECS-VSwitch2"
+                },
+                "SecurityGroupId": {
+                    "Ref": "ALIYUN-ECS-SecurityGroup1"
+                },
+                "UserData": "IyEvYmluL2Jhc2gKd2hpbGUgdHJ1ZSA7IGRvCihlY2hvIC1lICdIVFRQLzEuMSAyMDAgT0sNCic7IGVjaG8gLWUgIldlYiBTZXJ2ZXIgJChob3N0ICQoaG9zdG5hbWUpIHwgaGVhZCAtbjEgfCBhd2sgJ3twcmludCAkNH0nKSIpIHwgbmMgLXEgMCAtcCA4MCAtbCAwLjAuMC4wCmRvbmU=",
+                "InstanceChargeType": "PostPaid",
+                "InternetChargeType": "PayByTraffic",
+                "InternetMaxBandwidthOut": 1,
+                "InternetMaxBandwidthIn": 200,
+                "Period": 1
+            }
+        },
+        "ALIYUN-SLB-LoadBalancer1": {
+            "Type": "ALIYUN::SLB::LoadBalancer",
+            "Properties": {
+                "LoadBalancerName": "bigip-slb",
+                "VpcId": {
+                    "Ref": "ALIYUN-ECS-VPC1"
+                },
+                "MasterZoneId": "cn-beijing-h",
+                "SlaveZoneId": "cn-beijing-g",
+                "Bandwidth": 1,
+                "AddressType": "internet",
+                "InternetChargeType": "paybytraffic"
+            }
+        }
+    },
+    "Outputs": {}
+}
