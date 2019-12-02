@@ -1,7 +1,12 @@
 {
     "ROSTemplateFormatVersion": "2015-09-01",
     "Description": "",
-    "Parameters": {},
+    "Parameters": {
+        "WebServerRootPassword": {
+            "Type": "String",
+            "Default": "Abcd1234$"
+        }
+    },
     "Mappings": {},
     "Conditions": {},
     "Resources": {
@@ -116,7 +121,7 @@
         "ALIYUN-ECS-Instance1": {
             "Type": "ALIYUN::ECS::Instance",
             "Properties": {
-                "InstanceName": "bigip-13-1nic",
+                "InstanceName": "bigip-13-1nic-01",
                 "ImageId": "m-2ze4sdg64yx1bunfxyd8",
                 "InstanceType": "ecs.g6.large",
                 "ZoneId": "cn-beijing-h",
@@ -143,7 +148,7 @@
         "ALIYUN-ECS-Instance2": {
             "Type": "ALIYUN::ECS::Instance",
             "Properties": {
-                "InstanceName": "bigip-13-1nic",
+                "InstanceName": "bigip-13-1nic-02",
                 "ImageId": "m-2ze4sdg64yx1bunfxyd8",
                 "InstanceType": "ecs.g6.large",
                 "ZoneId": "cn-beijing-g",
@@ -177,7 +182,9 @@
                 "SystemDiskCategory": "cloud_efficiency",
                 "IoOptimized": "optimized",
                 "SystemDiskSize": "20",
-                "Password": "Abcd1234$",
+                "Password": {
+                  "Ref": "WebServerRootPassword"
+                },
                 "VpcId": {
                     "Ref": "ALIYUN-ECS-VPC1"
                 },
@@ -187,7 +194,17 @@
                 "SecurityGroupId": {
                     "Ref": "ALIYUN-ECS-SecurityGroup1"
                 },
-                "UserData": "IyEvYmluL2Jhc2gKd2hpbGUgdHJ1ZSA7IGRvCihlY2hvIC1lICdIVFRQLzEuMSAyMDAgT0sNCic7IGVjaG8gLWUgIldlYiBTZXJ2ZXIgJChob3N0ICQoaG9zdG5hbWUpIHwgaGVhZCAtbjEgfCBhd2sgJ3twcmludCAkNH0nKSIpIHwgbmMgLXEgMCAtcCA4MCAtbCAwLjAuMC4wCmRvbmU=",
+                "UserData": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "#!/bin/bash\n",
+                        "while true ; do\n",
+                        "(echo -e 'HTTP/1.1 200 OK\r\n'; echo -e \"Web Server $(host $(hostname) | head -n1 | awk '{print $4}')\") | nc -q 0 -p 80 -l 0.0.0.0\n",
+                        "done\n"
+                      ]
+                    ]
+                },
                 "InstanceChargeType": "PostPaid",
                 "InternetChargeType": "PayByTraffic",
                 "InternetMaxBandwidthOut": 1,
@@ -205,7 +222,9 @@
                 "SystemDiskCategory": "cloud_efficiency",
                 "IoOptimized": "optimized",
                 "SystemDiskSize": "20",
-                "Password": "Abcd1234$",
+                "Password": {
+                  "Ref": "WebServerRootPassword"
+                },
                 "VpcId": {
                     "Ref": "ALIYUN-ECS-VPC1"
                 },
@@ -215,7 +234,17 @@
                 "SecurityGroupId": {
                     "Ref": "ALIYUN-ECS-SecurityGroup1"
                 },
-                "UserData": "IyEvYmluL2Jhc2gKd2hpbGUgdHJ1ZSA7IGRvCihlY2hvIC1lICdIVFRQLzEuMSAyMDAgT0sNCic7IGVjaG8gLWUgIldlYiBTZXJ2ZXIgJChob3N0ICQoaG9zdG5hbWUpIHwgaGVhZCAtbjEgfCBhd2sgJ3twcmludCAkNH0nKSIpIHwgbmMgLXEgMCAtcCA4MCAtbCAwLjAuMC4wCmRvbmU=",
+                "UserData": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            "#!/bin/bash\n",
+                            "while true ; do\n",
+                            "(echo -e 'HTTP/1.1 200 OK\r\n'; echo -e \"Web Server $(host $(hostname) | head -n1 | awk '{print $4}')\") | nc -q 0 -p 80 -l 0.0.0.0\n",
+                            "done\n"
+                        ]
+                    ]
+                },
                 "InstanceChargeType": "PostPaid",
                 "InternetChargeType": "PayByTraffic",
                 "InternetMaxBandwidthOut": 1,
@@ -233,7 +262,9 @@
                 "SystemDiskCategory": "cloud_efficiency",
                 "IoOptimized": "optimized",
                 "SystemDiskSize": "20",
-                "Password": "Abcd1234$",
+                "Password": {
+                  "Ref": "WebServerRootPassword"
+                },
                 "VpcId": {
                     "Ref": "ALIYUN-ECS-VPC1"
                 },
@@ -243,7 +274,17 @@
                 "SecurityGroupId": {
                     "Ref": "ALIYUN-ECS-SecurityGroup1"
                 },
-                "UserData": "IyEvYmluL2Jhc2gKd2hpbGUgdHJ1ZSA7IGRvCihlY2hvIC1lICdIVFRQLzEuMSAyMDAgT0sNCic7IGVjaG8gLWUgIldlYiBTZXJ2ZXIgJChob3N0ICQoaG9zdG5hbWUpIHwgaGVhZCAtbjEgfCBhd2sgJ3twcmludCAkNH0nKSIpIHwgbmMgLXEgMCAtcCA4MCAtbCAwLjAuMC4wCmRvbmU=",
+                "UserData": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "#!/bin/bash\n",
+                        "while true ; do\n",
+                        "(echo -e 'HTTP/1.1 200 OK\r\n'; echo -e \"Web Server $(host $(hostname) | head -n1 | awk '{print $4}')\") | nc -q 0 -p 80 -l 0.0.0.0\n",
+                        "done\n"
+                      ]
+                    ]
+                },
                 "InstanceChargeType": "PostPaid",
                 "InternetChargeType": "PayByTraffic",
                 "InternetMaxBandwidthOut": 1,
@@ -261,7 +302,9 @@
                 "SystemDiskCategory": "cloud_efficiency",
                 "IoOptimized": "optimized",
                 "SystemDiskSize": "20",
-                "Password": "Abcd1234$",
+                "Password": {
+                  "Ref": "WebServerRootPassword"
+                },
                 "VpcId": {
                     "Ref": "ALIYUN-ECS-VPC1"
                 },
@@ -271,7 +314,17 @@
                 "SecurityGroupId": {
                     "Ref": "ALIYUN-ECS-SecurityGroup1"
                 },
-                "UserData": "IyEvYmluL2Jhc2gKd2hpbGUgdHJ1ZSA7IGRvCihlY2hvIC1lICdIVFRQLzEuMSAyMDAgT0sNCic7IGVjaG8gLWUgIldlYiBTZXJ2ZXIgJChob3N0ICQoaG9zdG5hbWUpIHwgaGVhZCAtbjEgfCBhd2sgJ3twcmludCAkNH0nKSIpIHwgbmMgLXEgMCAtcCA4MCAtbCAwLjAuMC4wCmRvbmU=",
+                "UserData": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            "#!/bin/bash\n",
+                            "while true ; do\n",
+                            "(echo -e 'HTTP/1.1 200 OK\r\n'; echo -e \"Web Server $(host $(hostname) | head -n1 | awk '{print $4}')\") | nc -q 0 -p 80 -l 0.0.0.0\n",
+                            "done\n"
+                        ]
+                    ]
+                },
                 "InstanceChargeType": "PostPaid",
                 "InternetChargeType": "PayByTraffic",
                 "InternetMaxBandwidthOut": 1,
