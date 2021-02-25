@@ -1,15 +1,13 @@
 #!/bin/bash -e
 
-mkdir -p /tmp/$$
-
 guestfish -a "$1" <<EOF
   run
   mount /dev/vg-db-vda/set.1.root /
   mount /dev/vg-db-vda/dat.share /shared
-  download /shared/vadc/.hypervisor_type /tmp/$$/.hypervisor_type
-  ! sed -i "s/HYPERVISOR=0/HYPERVISOR=alibaba/g" /tmp/$$/.hypervisor_type
-  upload /tmp/$$/.hypervisor_type /shared/vadc/.hypervisor_type
+  mount /dev/vg-db-vda/set.1._config /config
+  write /shared/vadc/.hypervisor_type "HYPERVISOR=alibaba\n"
+  write /config/tmm_init.tcl "device driver vendor_dev 1af4:1000 sock\n"
+  selinux-relabel /etc/selinux/targeted/contexts/files/file_contexts /config/tmm_init.tcl
+  sync
   exit
 EOF
-
-rm -rf /tmp/$$
