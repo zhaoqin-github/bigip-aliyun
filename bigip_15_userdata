@@ -1,0 +1,27 @@
+#cloud-config
+chpasswd:
+    list:
+        - root:default@f5.com
+        - admin:admin@f5.com
+    expire: false
+runcmd:
+    - /etc/vadc-init/alibaba-setup
+    - tmsh modify /sys ntp timezone Asia/Shanghai
+    - tmsh modify /sys global-settings gui-setup disabled
+    - tmsh save /sys config
+tmos_declared:
+    enabled: true
+    icontrollx_trusted_sources: false
+    icontrollx_package_urls:
+        - https://f5networks.oss-cn-beijing.aliyuncs.com/tool/do/f5-declarative-onboarding-1.18.0-4.noarch.rpm
+    do_declaration:
+        schemaVersion: 1.0.0
+        class: Device
+        async: true
+        label: BIG-IP onboarding declaration for Aliyun
+        Common:
+            class: Tenant
+            bigipLicense:
+                class: License
+                licenseType: regKey
+                regKey: AAAAA-BBBBB-CCCCC-DDDDD-EEEEEEE
