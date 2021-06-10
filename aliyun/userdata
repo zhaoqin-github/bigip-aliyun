@@ -1,0 +1,12 @@
+#cloud-config
+runcmd:
+  - /etc/vadc-init/aliyun-setup >/var/log/aliyun-setup.log 2>&1
+write_files:
+  - path: /tmp/license.key
+    permissions: 0644
+    owner: root:root
+    content: AAAAA-BBBBB-CCCCC-DDDDD-EEEEEEE
+  - path: /etc/vadc-init/aliyun-setup
+    permissions: 0755
+    owner: root:root
+    encoding: gz+b64
