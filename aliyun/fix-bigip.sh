@@ -1,7 +1,5 @@
 #!/bin/bash -e
 
-mkdir -p /tmp/$$
-
 guestfish -a "$1" <<EOF
   run
   mount /dev/vg-db-vda/set.1.root /
@@ -13,5 +11,3 @@ guestfish -a "$1" <<EOF
   sync
   exit
 EOF
-
-rm -rf /tmp/$$
