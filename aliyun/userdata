@@ -1,4 +1,7 @@
 #cloud-config
+chpasswd:
+  list: |
+    admin:admin@f5.com
 runcmd:
   - /etc/vadc-init/aliyun-setup >/var/log/aliyun-setup.log 2>&1
 write_files:
